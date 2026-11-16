@@ -29,6 +29,17 @@ const initDB = async () => {
     );
       `)
 
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS products(
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255),
+      description TEXT,
+      price NUMERIC(10,2),
+      created_at TIMESTAMP DEFAULT NOW(),
+      updated_at TIMESTAMP DEFAULT NOW()
+      )
+      `)
+
     console.log("Database connected Successfully!!")
   } catch (error) {
     console.log(error)
@@ -99,10 +110,10 @@ app.get('/api/v1/users/:id', async (req: Request, res: Response) => {
     // console.log(result)
 
     // todo: user not found
-    if(result.rowCount === 0){
+    if (result.rowCount === 0) {
       res.status(404).json({
-        success:false,
-        message:"User not found!!"
+        success: false,
+        message: "User not found!!"
       })
     }
 
@@ -136,19 +147,19 @@ app.put('/api/v1/users/:id', async (req: Request, res: Response) => {
       update_at = NOW()
 
       WHERE id = $5 RETURNING *
-      `,[name??null, password??null, age??null, is_Active??null,id]);
+      `, [name ?? null, password ?? null, age ?? null, is_Active ?? null, id]);
 
     // todo: user not found
-    if(result.rowCount === 0){
+    if (result.rowCount === 0) {
       res.status(404).json({
-        success:false,
-        message:"User not found!!"
+        success: false,
+        message: "User not found!!"
       })
     }
-    
+
     res.status(200).json({
-      success:true,
-      message:"User updated successful!!",
+      success: true,
+      message: "User updated successful!!",
       data: result.rows[0]
     })
 
@@ -163,29 +174,53 @@ app.put('/api/v1/users/:id', async (req: Request, res: Response) => {
 })
 
 // todo: delete user
-app.delete('/api/v1/users/:id',async(req:Request,res:Response)=>{
+app.delete('/api/v1/users/:id', async (req: Request, res: Response) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const result = await pool.query(`
       DELETE FROM users WHERE id=$1
-      `,[id])
+      `, [id])
     // todo: user not found
-    if(result.rowCount === 0){
+    if (result.rowCount === 0) {
       res.status(404).json({
-        success:false,
-        message:"User not found!!"
+        success: false,
+        message: "User not found!!"
       })
     }
 
     res.status(200).json({
-      success:true,
-      message:"User deleted successful!!"
+      success: true,
+      message: "User deleted successful!!"
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      error: error
+    })
+  }
+})
+
+
+//! products
+app.post("/api/v2/products", async (req: Request, res: Response) => {
+  try {
+    const { name, description, price } = req.body;
+    const result = await pool.query(`
+      INSERT INTO products (name,description,price)
+      VALUES($1,$2,$3) RETURNING *
+    `, [name, description, price]);
+
+    res.status(201).json({
+    success:true,
+    message:"Product created successful!!",
+    data: result.rows[0]
     })
   } catch (error:any) {
     res.status(500).json({
-      success: false,
-      message:error.message,
-      error:error
+    success:false,
+    message:error.message,
+    error:error
     })
   }
 })
