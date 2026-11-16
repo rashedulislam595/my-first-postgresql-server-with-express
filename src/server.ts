@@ -203,6 +203,49 @@ app.delete('/api/v1/users/:id', async (req: Request, res: Response) => {
 
 
 //! products
+
+app.get("/api/v2/products",async(req:Request,res:Response)=>{
+  try {
+    const result = await pool.query(`
+    SELECT * FROM products
+    `)
+    res.status(200).json({
+    success:true,
+    message:"Products retrieve successful!!",
+    data:result.rows
+    })
+  } catch (error:any) {
+    res.status(500).json({
+    success:false,
+    message:error.message,
+    error:error
+    })
+  }
+})
+
+//todo: get single product
+app.get('/api/v2/products/:id',async(req:Request,res:Response)=>{
+  try {
+  const {id} = req.params;
+  const result = await pool.query(`
+  SELECT * FROM products WHERE id = $1
+  `,[id])
+  res.status(200).json({
+  success:true,
+  message:"Product retrieve successful!!",
+  data:result.rows[0]
+  })
+    
+  } catch (error:any) {
+    res.status(500).json({
+    success:false,
+    message:error.message,
+    error: error
+    })
+  }
+})
+
+// todo: product create
 app.post("/api/v2/products", async (req: Request, res: Response) => {
   try {
     const { name, description, price } = req.body;
