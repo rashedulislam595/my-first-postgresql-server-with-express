@@ -318,6 +318,33 @@ app.put('/api/v2/products/:id', async (req: Request, res: Response) => {
   }
 })
 
+app.delete('/api/v2/products/:id',async(req:Request,res:Response)=>{
+  try {
+    const {id} = req.params;
+    const result = await pool.query( `
+      DELETE FROM products WHERE id=$1
+      `,[id])
+    
+    if(result.rowCount === 0){
+      res.status(404).json({
+        success:false,
+        message:"Product not found!!😛"
+      })
+    }
+    
+    res.status(200).json({
+      success:true,
+      message:"Product deleted successful!!"
+    })
+  } catch (error:any) {
+    res.status(500).json({
+      success:false,
+      message:error.message,
+      error:error
+    })
+  }
+})
+
 app.listen(config.port, () => {
   console.log(`Example app listening on port ${config.port}`)
 })
