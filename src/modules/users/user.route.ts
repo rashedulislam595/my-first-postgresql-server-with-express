@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { userController } from "./user.controller";
+import auth from "../../middleware/auth";
 
 const router = Router();
 // /api/v1/users
 router.post('/', userController.createUser)
-router.get('/', userController.getAllUser );
+router.get('/', auth, userController.getAllUser );
 // todo: get single users by id
 router.get('/:id', userController.getSingleUser )
 router.put('/:id', userController.updateUser );
