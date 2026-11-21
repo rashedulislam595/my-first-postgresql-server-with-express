@@ -37,6 +37,11 @@ const auth = async(req:Request,res:Response,next:NextFunction)=>{
         })
     }
 
+    //todo: req ar moddhe amader user take set kore dibo.. get method a req.body undefined thake.
+    //todo: user ar type ta global a express a set kore dite hobe express type namespace theke. 
+    req.user = decode;
+    // console.log(req)
+
     next()
 }
 

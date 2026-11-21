@@ -28,3 +28,10 @@ Method --> PUT | URL --> /api/v1/users/21 | Time --> 1795200473984
 Method --> GET | URL --> /api/v1/users | Time --> 1795200480947
 Method --> PUT | URL --> /api/v1/users/21 | Time --> 1795200505182
 Method --> GET | URL --> /api/v1/users | Time --> 1795200511557
+Method --> GET | URL --> /api/v1/users | Time --> 1795237206028
+Method --> GET | URL --> /api/v1/users/11 | Time --> 1795237241225
+Method --> GET | URL --> /api/v1/users/11 | Time --> 1795237244904
+Method --> GET | URL --> /api/v1/users | Time --> 1795237253774
+Method --> GET | URL --> /api/v1/users | Time --> 1795237311032
+Method --> GET | URL --> /api/v1/users | Time --> 1795237327036
+Method --> GET | URL --> /api/v1/users | Time --> 1795237834307
