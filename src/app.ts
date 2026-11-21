@@ -4,10 +4,17 @@ import { userRoute } from './modules/users/user.route';
 import { profileRoute } from './modules/profiles/profile.route';
 import { authRouter } from './modules/auth/auth.route';
 import logger from './middleware/logger';
+import globalErrorHandler from './middleware/globalErrorHandler';
+import cors from 'cors'
 const app: Application = express()
 
 
-// custom middleware
+// Adds headers: Access-Control-Allow-Origin: *
+var corsOptions = {
+  origin: ['http://localhost:3000'],
+  optionsSuccessStatus: 200 
+}
+app.use(cors(corsOptions))
 
 app.use(express.json())
 app.use(express.text());
@@ -169,5 +176,8 @@ app.delete('/api/v2/products/:id',async(req:Request,res:Response)=>{
     })
   }
 })
+
+// Global Error Handling Middleware
+app.use(globalErrorHandler);
 
 export default app;
