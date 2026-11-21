@@ -3,7 +3,9 @@ import jwt, { type JwtPayload } from 'jsonwebtoken';
 import config from "../config";
 import { pool } from "../db";
 
-const auth = async(req:Request,res:Response,next:NextFunction)=>{
+const auth = (...roles:any)=>{
+    console.log(roles)
+    return async(req:Request,res:Response,next:NextFunction)=>{
     // todo: check token ase ki nah. 
     // console.log(req.headers.authorization)
     const token = req.headers.authorization;
@@ -40,9 +42,11 @@ const auth = async(req:Request,res:Response,next:NextFunction)=>{
     //todo: req ar moddhe amader user take set kore dibo.. get method a req.body undefined thake.
     //todo: user ar type ta global a express a set kore dite hobe express type namespace theke. 
     req.user = decode;
+    // req ->>{body,user}
     // console.log(req)
 
     next()
+}
 }
 
 export default auth;

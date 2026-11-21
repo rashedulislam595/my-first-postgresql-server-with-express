@@ -79,6 +79,7 @@ const updateUser = async (req: Request, res: Response) => {
       })
     }
 
+    delete result.rows[0].password;
     res.status(200).json({
       success: true,
       message: "User updated successful!!",
