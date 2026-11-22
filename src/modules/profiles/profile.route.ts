@@ -3,6 +3,6 @@ import { profileController } from "./profile.controller";
 
 const router = Router();
 
-router.post('/',profileController.createProfile)
+router.get('/',profileController.createProfile)
 
 export const profileRoute = router;
