@@ -1,28 +1,30 @@
 import type { Request, Response } from "express";
 import { authService } from "./auth.service";
+import sendResponse from "../../utils/sendResponse";
 
 const loginUser = async (req: Request, res: Response) => {
     try {
         const result = await authService.loginUserIntoDB(req.body);
-        const {refreshToken} = result;
+        const { refreshToken } = result;
         // server theke browser cookies set 
-        res.cookie("Refresh_Token",refreshToken,{
-            secure:false, //? http-->false, https-->true, In production-->true
-            httpOnly:true, //? prevent xxs attack
-            sameSite:"lax", //? "none","strict","lax" --> protect CSRF attack
-            path:'/',
-            domain:"localhost" //? .example.com
+        res.cookie("Refresh_Token", refreshToken, {
+            secure: false, //? http-->false, https-->true, In production-->true
+            httpOnly: true, //? prevent xxs attack
+            sameSite: "lax", //? "none","strict","lax" --> protect CSRF attack
+            path: '/',
+            domain: "localhost" //? .example.com
 
         })
-
-        res.status(200).json({
+        sendResponse(res,{
+            statusCode:200,
             success:true,
-            message:"User login successful!!",
+            message:"User login successfully!!",
             data:result
         })
 
-    } catch (error:any) {
-        res.status(500).json({
+    } catch (error: any) {
+        sendResponse(res,{
+            statusCode:500,
             success:false,
             message:error.message,
             error:error
@@ -30,18 +32,20 @@ const loginUser = async (req: Request, res: Response) => {
     }
 }
 
-const generateAccessToken = async(req:Request, res:Response)=>{
+const generateAccessToken = async (req: Request, res: Response) => {
     try {
         // console.log(req.cookies.Refresh_Token)
         const result = await authService.accessTokenIntoDB(req.cookies.Refresh_Token);
-        res.status(201).json({
+
+        sendResponse(res, { 
+            statusCode: 201,
             success:true,
-            message:"Access token generated Successfully!!!",
-            result:result
-        })
-        
-    } catch (error:any) {
-        res.status(500).json({
+            message:"Access token generated successfully!!",
+            data:result
+         })
+    } catch (error: any) {
+        sendResponse(res,{
+            statusCode:500,
             success:false,
             message:error.message,
             error:error
